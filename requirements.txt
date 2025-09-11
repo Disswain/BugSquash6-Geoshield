@@ -1,0 +1,18 @@
+# Backend
+flask==3.0.3        # or use fastapi instead of flask
+# uvicorn==0.30.1     # only needed if you use FastAPI
+
+# Data handling
+pandas==2.2.2
+numpy==1.26.4
+
+# Visualization
+folium==0.16.0
+matplotlib==3.9.1
+
+# Optional (for better simulation & detection)
+faker==25.0.0       # generate fake GPS coordinates
+scikit-learn==1.5.0 # anomaly detection if needed
+
+# Testing
+pytest==8.3.2
