@@ -1,0 +1,4 @@
+lat,lon,timestamp,signature
+12.9716,77.5946,2025-09-11T10:00:00Z,<hmac_signature>
+12.9720,77.5948,2025-09-11T10:00:05Z,<hmac_signature>
+12.9725,77.5950,2025-09-11T10:00:10Z,<hmac_signature>
