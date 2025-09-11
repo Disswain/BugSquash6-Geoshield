@@ -4,3 +4,4 @@ timestamp,lat,lon,satellite_id,signature
 2025-09-11T10:00:10Z,12.9725,77.5950,G01,<hmac_signature>
 2025-09-11T10:00:15Z,28.7041,77.1025,G05,<hmac_signature>   # 🚨 Spoofed jump (Bangalore → Delhi in 5s)
 2025-09-11T10:00:20Z,28.7045,77.1028,G99,<hmac_signature>   # 🚨 Fake satellite ID
+
