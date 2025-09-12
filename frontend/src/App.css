@@ -1,0 +1,128 @@
+body, html, #root {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 220px;
+  background: linear-gradient(180deg, #0a1a2f, #000000); /* navy → black */
+  color: #ffffff;
+  padding: 15px;
+  overflow-y: auto;
+  border-right: 2px solid #0d2745;
+}
+
+.sidebar h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #00d9ff; /* cyan heading */
+  border-bottom: 1px solid #1f3a56;
+  padding-bottom: 8px;
+}
+
+/* Plane item */
+.plane-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.plane-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.plane-item.selected {
+  background: rgba(0, 217, 255, 0.25);
+  border-left: 4px solid #00d9ff;
+}
+
+.plane-item strong {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.plane-item span {
+  font-weight: bold;
+}
+
+.plane-item div {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+/* Map legend */
+.legend {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.3);
+}
+.plane-item strong {
+  font-size: 16px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.plane-item span {
+  font-weight: bold;
+  margin-left: 4px;
+}
+/* Start Simulation button */
+.start-button {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #0a1a2f, #000000);
+  color: #ffffff;
+  border: 2px solid #00d9ff;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  z-index: 1000;
+  animation: flash 1.5s infinite;
+}
+
+.start-button:hover {
+  background: #00d9ff;
+  color: #000000;
+}
+
+/* Flash effect */
+@keyframes flash {
+  0% { box-shadow: 0 0 5px #00d9ff; }
+  50% { box-shadow: 0 0 20px #00d9ff; }
+  100% { box-shadow: 0 0 5px #00d9ff; }
+}
+
+/* Spoof button in sidebar */
+.spoof-button {
+  margin-top: 6px;
+  width: 100%;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.spoof-button:hover {
+  background: #ff1a1a;
+}
