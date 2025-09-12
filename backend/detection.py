@@ -1,25 +1,33 @@
-from geopy.distance import geodesic
-from datetime import datetime
+import os
+import pandas as pd
 
-def detect_spoofing(data):
-    """
-    data: list of dicts with lat, lon, time
-    returns: list of alerts
-    """
-    alerts = []
-    for i in range(1, len(data)):
-        p1 = (data[i-1]["lat"], data[i-1]["lon"])
-        p2 = (data[i]["lat"], data[i]["lon"])
-        t1 = datetime.fromisoformat(data[i-1]["time"])
-        t2 = datetime.fromisoformat(data[i]["time"])
-        
-        distance = geodesic(p1, p2).km
-        time_diff = (t2 - t1).seconds / 3600  # in hours
-        speed = distance / time_diff if time_diff else float("inf")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "../data")
 
-        if speed > 1000:  # spoofing threshold
-            alerts.append({
-                "index": i,
-                "message": f"Unrealistic speed detected ({speed:.2f} km/h)"
-            })
-    return alerts
+def process_csv(csv_file):
+    path = os.path.join(DATA_DIR, os.path.basename(csv_file))
+    if not os.path.exists(path):
+        print(f"CSV not found: {path}")
+        return []
+
+    df = pd.read_csv(path)
+    results = []
+
+    for _, row in df.iterrows():
+        lat, lon = row.get("lat"), row.get("lon")
+        plane = row.get("plane", "plane1")
+        timestamp = row.get("timestamp", "N/A")
+        speed = row.get("speed", 0)
+
+        status = "SAFE"
+        if speed > 1200:
+            status = "SPOOFED"
+
+        results.append({
+            "plane": plane,
+            "lat": lat,
+            "lon": lon,
+            "timestamp": timestamp,
+            "status": status
+        })
+
+    return results
