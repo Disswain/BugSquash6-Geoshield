@@ -1,34 +1,43 @@
-from flask import Flask, request, jsonify
-from detection import detect_anomaly
-from auth import verify_message
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from detection import process_csv
+from auth import verify_signature
 
 app = Flask(__name__)
+CORS(app)
 
-@app.route("/detect", methods=["POST"])
-def detect():
-    """
-    POST request with:
-    {
-        "lat": float,
-        "lon": float,
-        "timestamp": str,
-        "signature": str
-    }
-    """
+@app.route("/live_planes_multi", methods=["POST"])
+def live_planes_multi():
     data = request.json
-    lat, lon, ts, sig = data["lat"], data["lon"], data["timestamp"], data["signature"]
+    csv_files = data.get("csv_files", [])
+    signature = data.get("signature")
 
-    # Step 1: Verify authenticity
-    message = f"{lat},{lon},{ts}"
-    if not verify_message(message, sig):
-        return jsonify({"status": "spoofed", "reason": "Invalid Signature"})
+    if not verify_signature(",".join(csv_files), signature):
+        return jsonify({"error": "Invalid signature"}), 401
 
-    # Step 2: Run anomaly detection
-    is_anomaly = detect_anomaly(lat, lon, ts)
-    if is_anomaly:
-        return jsonify({"status": "spoofed", "reason": "Anomaly Detected"})
+    combined_data = {}
+    for csv_file in csv_files:
+        results = process_csv(csv_file)  # full trajectory
+        for row in results:
+            plane = row["plane"]
+            if plane not in combined_data:
+                combined_data[plane] = []
+            combined_data[plane].append({
+                "lat": row["lat"],
+                "lon": row["lon"],
+                "status": row["status"],
+                "timestamp": row["timestamp"]
+            })
 
-    return jsonify({"status": "safe", "reason": "Valid & Consistent"})
+    # Send the full trajectory and current position
+    response = {}
+    for plane, traj in combined_data.items():
+        response[plane] = {
+            "current": traj[-1],
+            "trajectory": traj  # ALL points, not just last few
+        }
+
+    return jsonify(response)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
