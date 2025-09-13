@@ -9,10 +9,13 @@
 
 * {
   box-sizing: border-box;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
   background: linear-gradient(180deg, #0b1216 0%, #071018 100%);
@@ -53,11 +56,15 @@ html, body, #root {
 
 /* Card base */
 .card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border: 1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.03);
   padding: 14px;
   border-radius: 10px;
-  box-shadow: 0 6px 14px rgba(3,6,8,0.6);
+  box-shadow: 0 6px 14px rgba(3, 6, 8, 0.6);
 }
 
 /* Planes card */
@@ -75,13 +82,13 @@ html, body, #root {
 .plane-item {
   padding: 10px;
   border-radius: 8px;
-  background: rgba(255,255,255,0.01);
+  background: rgba(255, 255, 255, 0.01);
   cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.01);
+  border: 1px solid rgba(255, 255, 255, 0.01);
 }
 .plane-item.selected {
-  border-color: rgba(30,150,120,0.25);
-  box-shadow: inset 0 0 0 1px rgba(30,150,120,0.03);
+  border-color: rgba(30, 150, 120, 0.25);
+  box-shadow: inset 0 0 0 1px rgba(30, 150, 120, 0.03);
 }
 .pi-top {
   display: flex;
@@ -113,7 +120,7 @@ html, body, #root {
   width: 72px;
   padding: 6px 8px;
   border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.03);
+  border: 1px solid rgba(255, 255, 255, 0.03);
   background: transparent;
   color: #dfe9ef;
   font-size: 13px;
@@ -132,17 +139,22 @@ html, body, #root {
   display: flex;
   gap: 8px;
   margin-top: 8px;
+  flex-wrap: wrap;
 }
 .control-btn {
   padding: 8px 10px;
   border-radius: 6px;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.03);
+  border: 1px solid rgba(255, 255, 255, 0.03);
   color: #dfe9ef;
   cursor: pointer;
+  transition: 0.2s ease;
+}
+.control-btn:hover {
+  background: rgba(31, 138, 112, 0.15);
 }
 
-/* Main map area */
+/* Main map/globe area */
 .main-area {
   display: flex;
   flex-direction: column;
@@ -157,18 +169,27 @@ html, body, #root {
 }
 .start-overlay {
   position: absolute;
-  z-index: 20;
-  left: 20px;
-  top: 20px;
+  z-index: 2000;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
+
 .start-button {
-  padding: 10px 14px;
-  border-radius: 8px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
   background: #1f8a70;
   border: none;
   color: white;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(15,120,90,0.18);
+  box-shadow: 0 6px 16px rgba(15, 120, 90, 0.3);
+  transition: all 0.2s ease;
+}
+.start-button:hover {
+  background: #27b088;
+  transform: scale(1.05);
 }
 
 /* Zoom controls */
@@ -186,7 +207,7 @@ html, body, #root {
   height: 34px;
   border-radius: 6px;
   border: none;
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
   color: #dbeaf0;
   cursor: pointer;
 }
@@ -220,8 +241,8 @@ html, body, #root {
   gap: 12px;
   padding: 10px;
   border-radius: 8px;
-  background: rgba(255,255,255,0.01);
-  border: 1px solid rgba(255,255,255,0.02);
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.02);
 }
 .alert-badge {
   width: 18px;
@@ -229,10 +250,10 @@ html, body, #root {
   border-radius: 50%;
 }
 .alert-badge.high {
-  background: rgba(255,80,80,0.95);
+  background: rgba(255, 80, 80, 0.95);
 }
 .alert-badge.medium {
-  background: rgba(255,200,56,0.95);
+  background: rgba(255, 200, 56, 0.95);
 }
 .alert-mid {
   flex: 1;
@@ -275,8 +296,8 @@ html, body, #root {
   gap: 12px;
   padding: 8px;
   border-radius: 8px;
-  background: rgba(255,255,255,0.01);
-  border: 1px solid rgba(255,255,255,0.02);
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.02);
 }
 .dot {
   width: 12px;
@@ -320,7 +341,7 @@ html, body, #root {
   color: var(--muted);
   padding: 6px 8px;
   border-radius: 8px;
-  background: rgba(255,255,255,0.01);
+  background: rgba(255, 255, 255, 0.01);
 }
 .log-time {
   color: #9fb0bb;
@@ -339,6 +360,22 @@ html, body, #root {
 .spoofed {
   color: #ff7b7b;
 }
+.leaflet-tooltip .spoof-reason {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: #ff7b7b;
+  font-style: italic;
+}
+
+/* Spoof reason */
+.spoof-reason {
+  color: #ff7b7b;
+  font-style: italic;
+  margin-left: 4px;
+  font-size: 12px;
+  opacity: 0.9;
+}
 
 /* Utility */
 .empty {
@@ -347,7 +384,7 @@ html, body, #root {
 }
 
 /* Responsive */
-@media (max-width:1100px) {
+@media (max-width: 1100px) {
   .app-grid {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
