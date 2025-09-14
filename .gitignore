@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node / React
+node_modules/
+.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
