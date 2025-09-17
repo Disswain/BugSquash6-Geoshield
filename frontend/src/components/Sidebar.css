@@ -1,0 +1,121 @@
+/* Sidebar.css */
+
+.sidebar-left {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Brand/logo */
+.brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.logo-background {
+  width: 110px !important;
+  height: auto !important;
+  filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.9))
+          drop-shadow(0 0 40px rgba(0, 200, 255, 0.6))
+          drop-shadow(0 0 60px rgba(0, 255, 255, 0.5));
+  pointer-events: none;
+}
+
+/* Planes */
+.planes-card {
+  padding-left: 8px;
+  flex: 1;
+  min-height: 200px;
+  overflow: auto;
+}
+
+.planes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.plane-item {
+  padding: 6px 8px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.pi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pi-bottom {
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.status.safe {
+  color: #6ee7b7;
+  font-weight: 600;
+}
+
+.status.spoofed {
+  color: #ff7b7b;
+  font-weight: 700;
+}
+
+.dest-check {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.dest-check input {
+  width: 72px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 13px;
+}
+
+.dest-check input:focus {
+  outline: none;
+  border: 1px solid #00ffc3;
+  box-shadow: 0 0 8px rgba(0, 255, 200, 0.4);
+}
+
+.spoof-button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #1f8a70;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Controls */
+.controls-card {
+  margin-top: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.control-btn {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.control-btn:hover {
+  background: rgba(31, 138, 112, 0.15);
+}

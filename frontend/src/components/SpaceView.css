@@ -1,0 +1,11 @@
+.space-view {
+  height: 100%;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at center, #020111 0%, #000000 100%);
+}
+
+.space-view canvas {
+  border-radius: 12px;
+}
