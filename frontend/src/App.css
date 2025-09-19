@@ -117,3 +117,24 @@ body,
   transform: scale(1.05);
   text-shadow: 0 0 12px rgba(0, 255, 255, 1);
 }
+/* 🌟 Neon Button (used for Login + Logout) */
+.neon-button {
+  background: transparent;
+  color: #00f0ff;
+  border: 2px solid #00f0ff;
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff;
+  transition: all 0.3s ease;
+}
+
+.neon-button:hover {
+  background: #00f0ff;
+  color: black;
+  box-shadow: 0 0 25px #00f0ff, 0 0 50px #00f0ff;
+}

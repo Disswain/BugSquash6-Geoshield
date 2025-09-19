@@ -1,0 +1,197 @@
+/* Main container */
+.login-container {
+  flex:1;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100vh;
+  background: radial-gradient(circle at top, #0d0d0d, #050505);
+  color: white;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0 5%;
+  gap: 40px;
+  /* 🔹 New: shift panel slightly right */
+  margin-right:-140px;
+  
+  
+}
+
+/* Logo area */
+.login-logo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-logo img {
+  width: 560px !important;
+  height: auto;
+  filter: drop-shadow(0px 0px 20px rgba(0, 255, 255, 0.7));
+  transition: transform 0.3s ease-in-out;
+}
+
+.login-logo img:hover {
+  transform: scale(1.05);
+}
+
+/* Glow bar divider (desktop) */
+.glow-bar {
+  width: 8px;
+  height: 60%;
+   margin-left: -180px;
+  background: linear-gradient(180deg, #00f0ff, #0077ff);
+  box-shadow: 0px 0px 25px #00e0ff, 0px 0px 50px #0077ff;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+/* Form area */
+.login-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: transparent;
+  padding: 40px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow:transparent;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Title */
+.login-title {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #00d0ff;
+  text-shadow: 0 0 10px #00d0ff;
+}
+
+/* Input fields */
+.login-form input {
+  width: 380px !important;
+  height: 70px;
+  padding: 12px 15px;
+  margin: 12px 0;
+  border: 1px solid #222;
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.8);
+  color: rgb(2, 2, 2);
+  font-size: 19px;
+  transition: all 0.2s ease-in-out;
+}
+
+.login-form input:focus {
+  border: 1px solid #00d0ff;
+  box-shadow: 0 0 10px #00d0ff;
+}
+
+/* Neon button */
+.neon-button {
+  margin-top: 15px;
+  width: 380px;
+  height: 70px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #00aaff, #0077ff);
+  color: white;
+  font-weight: bold;
+  font-size: 20px !important;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 12px #00aaff, 0 0 25px #0077ff;
+}
+
+.neon-button:hover {
+  background: linear-gradient(90deg, #00d0ff, #0099ff);
+  box-shadow: 0 0 18px #00d0ff, 0 0 35px #0099ff;
+  transform: translateY(-2px);
+}
+
+/* Forgot password */
+.forgot-password {
+  margin-top: 12px;
+  font-size: 17px;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.forgot-password:hover {
+  color: #00d0ff;
+  text-decoration: underline;
+}
+
+/* Smooth fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 Responsive layout for mobile */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .glow-bar {
+    width: 70%;
+    height: 8px;
+    margin: 20px 0;
+    background: linear-gradient(90deg, #00f0ff, #0077ff);
+  }
+
+  .login-form {
+    align-items: center;
+    width: 100%;
+    padding: 30px 20px;
+  }
+
+  .login-form input,
+  .neon-button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+h2{
+  display: none;
+}
+/* Logout button - smaller version */
+.logout-button {
+ margin-top: 15px;
+  width: 280px;
+  height: 50px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #000000, #000000);
+  color: white;
+  font-weight: bold;
+  font-size: 15px !important;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 12px #020202, 0 0 25px #080808;
+}
+
+.logout-button:hover {
+  background: linear-gradient(90deg, #00d0ff, #0099ff);
+  box-shadow: 0 0 18px #00d0ff, 0 0 35px #0099ff;
+  transform: translateY(-2px);
+}

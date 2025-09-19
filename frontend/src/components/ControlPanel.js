@@ -1,6 +1,11 @@
-// src/components/ControlPanel.js
 import React from "react";
-import { FaPlayCircle, FaRedo, FaGlobe, FaSatellite } from "react-icons/fa"; // icons
+import {
+  FaPlayCircle,
+  FaRedo,
+  FaGlobe,
+  FaSatellite,
+  FaBroadcastTower,
+} from "react-icons/fa";
 import "./ControlPanel.css";
 
 function ControlPanel({
@@ -16,32 +21,28 @@ function ControlPanel({
     <div className="card controls-card">
       <h4>⚙ Control Options</h4>
 
-      {/* Start + Restart buttons (compact at top) */}
+      {/* Start + Restart buttons */}
       <div className="control-buttons">
         <button
           className="btn start-btn"
           onClick={startSimulation}
-          disabled={simulationStarted}
         >
-          <FaPlayCircle /> Start Simulation
+          <FaPlayCircle /> {simulationStarted ? "Continue Simulation" : "Start Simulation"}
         </button>
         <button className="btn restart-btn" onClick={restartSimulation}>
           <FaRedo /> Restart
         </button>
       </div>
 
-      {/* Demo Mode Toggle */}
+      {/* Real-Time Mode Toggle */}
       <div className="control-toggle">
-        <FaPlayCircle className="control-icon" />
-        <span>Demo Mode</span>
+        <FaBroadcastTower className="control-icon" />
+        <span>Real-Time Mode</span>
         <label className="switch">
           <input
             type="checkbox"
-            checked={simulationModeEnabled}
-            onChange={() => {
-              setSimulationModeEnabled(!simulationModeEnabled);
-              if (!simulationStarted) startSimulation();
-            }}
+            checked={!simulationModeEnabled}
+            onChange={() => setSimulationModeEnabled(!simulationModeEnabled)}
           />
           <span className="slider round"></span>
         </label>
