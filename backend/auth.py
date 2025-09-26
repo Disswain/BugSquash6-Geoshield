@@ -1,7 +1,7 @@
 import hmac
 import hashlib
 
-SECRET_KEY = "supersecretkey"  # must match frontend
+SECRET_KEY = "supersecretkey" 
 
 def verify_signature(message: str, signature: str) -> bool:
     computed_sig = hmac.new(

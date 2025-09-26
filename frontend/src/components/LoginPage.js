@@ -13,7 +13,7 @@ export default function LoginPage({ onLogin }) {
   return (
     <div className="login-container">
       {/* Left side - Logo */}
-      <div className="login-logo">
+      <div className="logo-container">
         <img
           src={process.env.PUBLIC_URL + "/logo-glow.png"}
           alt="GeoShield Logo"
@@ -21,30 +21,34 @@ export default function LoginPage({ onLogin }) {
       </div>
 
       {/* Middle - Glow divider bar */}
-      <div className="glow-bar"></div>
+      <div className="bar-container">
+        <div className="glow-bar"></div>
+      </div>
 
       {/* Right side - Form */}
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h2 className="login-title">Welcome Back</h2>
-        <input
-          type="email"
-          placeholder="✉ Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="🔑 Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" className="neon-button">
-          Login
-        </button>
-        <div className="forgot-password">Forgot password?</div>
-      </form>
+      <div className="form-container">
+        <form className="login-form" onSubmit={handleSubmit}>
+          <h2 className="login-title"></h2>
+          <input
+            type="email"
+            placeholder="✉ Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="🔑 Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="neon-button">
+            Login
+          </button>
+          <div className="forgot-password">Forgot password?</div>
+        </form>
+      </div>
     </div>
   );
 }

@@ -1,63 +1,91 @@
 /* Main container */
 .login-container {
-  flex:1;
+  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+  align-items: center;       /* ✅ vertical center */
+  justify-content: center;   /* ✅ horizontal center */
   height: 100vh;
-  background: radial-gradient(circle at top, #0d0d0d, #050505);
+
+  /* 🔹 Space background */
+  background: url("../assets/space-bg.png") no-repeat center center fixed;
+  background-size: 100% 100%;
+  background-color: black;
+
+  position: relative;
   color: white;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  padding: 0 5%;
-  gap: 40px;
-  /* 🔹 New: shift panel slightly right */
-  margin-right:-140px;
-  
-  
+  padding: 0;
+  gap: 80px; /* spacing between logo, glow bar, and form */
+  margin: 0;
+}
+
+/* Keep elements above background */
+.logo-container,
+.bar-container,
+.form-container {
+  position: relative;
+  z-index: 1;
 }
 
 /* Logo area */
-.login-logo {
-  flex: 1;
+.logo-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 }
 
-.login-logo img {
-  width: 560px !important;
+.logo-container img {
+  margin-left:-100px;
+  width: 440px !important; /* keep same size */
   height: auto;
   filter: drop-shadow(0px 0px 20px rgba(0, 255, 255, 0.7));
   transition: transform 0.3s ease-in-out;
 }
 
-.login-logo img:hover {
+.logo-container img:hover {
   transform: scale(1.05);
 }
 
-/* Glow bar divider (desktop) */
-.glow-bar {
-  width: 8px;
-  height: 60%;
-   margin-left: -180px;
+/* Glow bar divider */
+.bar-container {
+   display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3; /* above form */
+  pointer-events: none; /* so it doesn't block clicks on the form if overlapped */
+}
+
+.bar-container .glow-bar {
+   width: 8px;               /* thickness */
+  height: 65vh;            /* tall and visible — uses viewport to avoid collapsing */
+  max-height: 80%;         /* keep original behaviour on small screens */
   background: linear-gradient(180deg, #00f0ff, #0077ff);
-  box-shadow: 0px 0px 25px #00e0ff, 0px 0px 50px #0077ff;
+  box-shadow: 0 0 25px #00e0ff, 0 0 60px #0077ff;
   border-radius: 10px;
   flex-shrink: 0;
+  z-index: 4;              /* make sure the glow is over the panel */
+  position: relative;
+  margin-left:-110px;
 }
 
 /* Form area */
-.login-form {
-  flex: 1;
+.form-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.form-container .login-form {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.4); /* glass-like panel */
   padding: 40px;
   border-radius: 15px;
   backdrop-filter: blur(10px);
-  box-shadow:transparent;
   animation: fadeIn 0.8s ease-in-out;
+  width:490px;
+  max-width: 520px; /* prevents it from stretching */
 }
 
 /* Title */
@@ -71,15 +99,16 @@
 
 /* Input fields */
 .login-form input {
-  width: 380px !important;
+  width: 100%;
+  max-width: 380px;
   height: 70px;
   padding: 12px 15px;
   margin: 12px 0;
   border: 1px solid #222;
   border-radius: 8px;
   outline: none;
-  background: rgba(255, 255, 255, 0.8);
-  color: rgb(2, 2, 2);
+  background: rgba(255, 255, 255, 0.85);
+  color: #020202;
   font-size: 19px;
   transition: all 0.2s ease-in-out;
 }
@@ -92,7 +121,8 @@
 /* Neon button */
 .neon-button {
   margin-top: 15px;
-  width: 380px;
+  width: 100%;
+  max-width: 380px;
   height: 70px;
   padding: 12px;
   border: none;
@@ -140,7 +170,7 @@
   }
 }
 
-/* 📱 Responsive layout for mobile */
+/* 📱 Responsive layout */
 @media (max-width: 768px) {
   .login-container {
     flex-direction: column;
@@ -149,14 +179,15 @@
     padding: 20px;
   }
 
-  .glow-bar {
+  .bar-container .glow-bar {
     width: 70%;
     height: 8px;
     margin: 20px 0;
+    margin-left: 100px;
     background: linear-gradient(90deg, #00f0ff, #0077ff);
   }
 
-  .login-form {
+  .form-container .login-form {
     align-items: center;
     width: 100%;
     padding: 30px 20px;
@@ -168,12 +199,10 @@
     max-width: 300px;
   }
 }
-h2{
-  display: none;
-}
-/* Logout button - smaller version */
+
+/* Logout button */
 .logout-button {
- margin-top: 15px;
+  margin-top: 15px;
   width: 280px;
   height: 50px;
   padding: 12px;

@@ -24,6 +24,11 @@ function Sidebar({
   const [selectedSat, setSelectedSat] = useState(null);
   const intervalsRef = useRef({});
 
+  // 🔹 AI state
+  const [aiResult, setAiResult] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
+
+  // ---------------- Utils ----------------
   const handleInputChange = (plane, field, value) => {
     setInputs((prev) => ({
       ...prev,
@@ -46,7 +51,6 @@ function Sidebar({
   const clamp = (val, min = 0, max = 100) =>
     Math.max(min, Math.min(max, val));
 
-  // Progress bar
   const ProgressBar = ({ value }) => {
     const safeVal = value != null ? clamp(Math.round(value)) : 0;
     let color = "gray";
@@ -78,14 +82,90 @@ function Sidebar({
   const effectiveStatus = (sat, id) => {
     const override = satStatuses[id];
     if (override) return override;
-    return (sat.status || "OK").toString().toUpperCase();
+    return (sat.status || "SAFE").toString().toUpperCase();
   };
 
-  // --- Manual actions ---
+  // ---------------- AI Fetch ----------------
+  const fetchAIPrediction = async (features) => {
+    try {
+      setAiLoading(true);
+      const res = await fetch("http://127.0.0.1:5000/ai_classify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ features }),
+      });
+      const data = await res.json();
+      setAiResult(data);
+    } catch (err) {
+      console.error("AI fetch error:", err);
+      setAiResult(null);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  // 🔹 Auto-run AI whenever a satellite or plane is selected
+  useEffect(() => {
+    if (selectedSat) {
+      const sat = satellites.find(
+        (s, i) => (s.id || s.name || `sat-${i}`) === selectedSat
+      );
+      const metrics = satMetrics[selectedSat] || { health: 100, link: 100 };
+
+      if (sat) {
+        let spoofOffset = 0;
+        let timeOffset = 0;
+        if (metrics.falsified?.actual) {
+          const dLat = metrics.falsified.lat - metrics.falsified.actual.lat;
+          const dLon = metrics.falsified.lon - metrics.falsified.actual.lon;
+          spoofOffset = Math.sqrt(dLat * dLat + dLon * dLon);
+          timeOffset = metrics.falsified.timeOffset || 0;
+        }
+
+        // ✅ Standardized 7 features
+        const features = [
+          parseFloat(sat.position?.lat || 0),   // lat
+          parseFloat(sat.position?.lon || 0),   // lon
+          0,                                    // no speed for sats
+          metrics.health,                       // health
+          metrics.link,                         // link
+          spoofOffset,                          // spoof offset distance
+          timeOffset,                           // spoof time offset
+        ];
+        fetchAIPrediction(features);
+      }
+    } else if (selectedPlane) {
+      const pos = planes[selectedPlane];
+      const info = speedETA[selectedPlane] || {};
+      if (pos) {
+        // ✅ Standardized 7 features
+        const features = [
+          parseFloat(pos.lat || 0),             // lat
+          parseFloat(pos.lon || 0),             // lon
+          parseFloat(info.speed || 0),          // speed
+          100,                                  // assume full health for planes
+          100,                                  // assume strong link
+          0,                                    // no spoof offset
+          0,                                    // no spoof time offset
+        ];
+        fetchAIPrediction(features);
+      }
+    } else {
+      setAiResult(null);
+    }
+  }, [selectedSat, selectedPlane, satMetrics, planes, satellites, speedETA]);
+
+  // ---------------- Manual Actions ----------------
   const spoofSatellite = (id, sat) => {
-    const offsetLat = (Math.random() - 0.5) * 1.0; // ±0.5°
+    const offsetLat = (Math.random() - 0.5) * 1.0;
     const offsetLon = (Math.random() - 0.5) * 1.0;
-    const timeOffset = Math.floor(5 + Math.random() * 15); // 5–20s
+    const timeOffset = Math.floor(5 + Math.random() * 15);
+
+    const actualPos =
+      sat?.lastTelemetry?.position ?? {
+        lat: parseFloat(sat.position?.lat || sat.position?.[0] || 0),
+        lon: parseFloat(sat.position?.lon || sat.position?.[1] || 0),
+      };
 
     setSatStatuses((s) => ({ ...s, [id]: "SPOOFED" }));
     setSatMetrics((prev) => {
@@ -97,9 +177,10 @@ function Sidebar({
           health: clamp(cur.health - 10),
           link: clamp(cur.link - 15),
           falsified: {
-            lat: (sat?.lastTelemetry?.position?.lat || 0) + offsetLat,
-            lon: (sat?.lastTelemetry?.position?.lon || 0) + offsetLon,
+            lat: actualPos.lat + offsetLat,
+            lon: actualPos.lon + offsetLon,
             timeOffset,
+            actual: actualPos,
           },
         },
       };
@@ -112,7 +193,11 @@ function Sidebar({
       const cur = prev[id] || { health: 100, link: 100 };
       return {
         ...prev,
-        [id]: { ...cur, health: clamp(cur.health - 5), link: clamp(cur.link - 25) },
+        [id]: {
+          ...cur,
+          health: clamp(cur.health - 5),
+          link: clamp(cur.link - 25),
+        },
       };
     });
   };
@@ -125,11 +210,18 @@ function Sidebar({
     setSatMetrics((prev) => {
       const cur = prev[id] || { health: 100, link: 100 };
       const { falsified, ...rest } = cur;
-      return { ...prev, [id]: { ...rest, health: clamp(cur.health + 15), link: clamp(cur.link + 20) } };
+      return {
+        ...prev,
+        [id]: {
+          ...rest,
+          health: clamp(cur.health + 15),
+          link: clamp(cur.link + 20),
+        },
+      };
     });
   };
 
-  // Simulated metrics
+  // ---------------- Simulated metrics update ----------------
   useEffect(() => {
     const presentIds = satellites.map((s, i) => s.id || s.name || `sat-${i}`);
     Object.keys(intervalsRef.current).forEach((id) => {
@@ -146,7 +238,7 @@ function Sidebar({
       intervalsRef.current[id] = setInterval(() => {
         setSatMetrics((prev) => {
           const cur = prev[id] || { health: 100, link: 100 };
-          const stat = effectiveStatus(sat, id).toString().toUpperCase();
+          const stat = effectiveStatus(sat, id);
           const next = { ...prev, [id]: { ...cur } };
 
           if (stat === "SPOOFED") {
@@ -169,12 +261,46 @@ function Sidebar({
       Object.values(intervalsRef.current).forEach(clearInterval);
       intervalsRef.current = {};
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [satellites, satStatuses]);
 
+  // ---------------- UI ----------------
   const isSpaceMode = viewMode === "space";
   const headerIcon = isSpaceMode ? "🛰" : "✈";
   const headerTitle = isSpaceMode ? "Active Satellites" : "Active Planes";
+
+  // 🔹 helper to compare AI vs manual
+  const renderAIPrediction = (manualStatus) => {
+    if (!aiResult) return null;
+
+    const aiStatus = aiResult.prediction?.toUpperCase();
+    const confidence = Math.round(
+      Math.max(...(aiResult.probabilities || [0])) * 100
+    );
+
+    const mismatch =
+      aiStatus && manualStatus && aiStatus !== manualStatus.toUpperCase();
+
+    return (
+      <div
+        className="ai-result"
+        style={{
+          marginTop: 6,
+          color: mismatch ? "orange" : "#0ff",
+          fontWeight: mismatch ? 700 : 500,
+        }}
+      >
+        <strong>AI:</strong>{" "}
+        {aiLoading
+          ? "Loading..."
+          : aiStatus
+          ? `${aiStatus} (${confidence}%)`
+          : "(no data)"}
+        {mismatch && (
+          <span style={{ marginLeft: 8, color: "red" }}>⚠ </span>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="sidebar-left">
@@ -187,8 +313,11 @@ function Sidebar({
       </div>
 
       <div className="card planes-card">
-        <h4>{headerIcon} {headerTitle}</h4>
+        <h4>
+          {headerIcon} {headerTitle}
+        </h4>
         <div className="planes-list">
+          {/* Satellites */}
           {isSpaceMode ? (
             satellites.length === 0 ? (
               <div className="empty">No satellites active. Enable Space Mode.</div>
@@ -203,17 +332,21 @@ function Sidebar({
                   <div
                     key={id}
                     className="plane-item"
-                    onClick={() => setSelectedSat((prev) => (prev === id ? null : id))}
+                    onClick={() =>
+                      setSelectedSat((prev) => (prev === id ? null : id))
+                    }
                     style={{ cursor: "pointer" }}
                   >
                     <div className="pi-top">
                       <div>
                         <strong>{sat.name || "Unknown Satellite"}</strong>
-                        {sat.id && sat.id !== sat.name && <small> ({sat.id})</small>}
+                        {sat.id && sat.id !== sat.name && (
+                          <small> ({sat.id})</small>
+                        )}
                       </div>
                       <div
                         className={`status ${
-                          status === "OK"
+                          status === "SAFE"
                             ? "safe"
                             : status === "JAMMED"
                             ? "warning"
@@ -226,6 +359,9 @@ function Sidebar({
                       </div>
                     </div>
 
+                    {/* 🔹 Show AI prediction if this sat is selected */}
+                    {selectedSat === id && renderAIPrediction(status)}
+
                     <div className="pi-bottom">
                       <div style={{ flex: 1, marginRight: "6px" }}>
                         <span>Health:</span>
@@ -237,19 +373,29 @@ function Sidebar({
                       </div>
                     </div>
 
-                    {sat.lastTelemetry?.position && (
-                      <div className="pi-bottom">
-                        <div>Actual Lat: {sat.lastTelemetry.position.lat}</div>
-                        <div>Actual Lon: {sat.lastTelemetry.position.lon}</div>
-                      </div>
-                    )}
-
-                    {/* Show falsified info if spoofed */}
+                    {/* Spoofed info */}
                     {status === "SPOOFED" && metrics.falsified && (
-                      <div className="pi-bottom" style={{ color: "red" }}>
-                        <div>Falsified Lat: {metrics.falsified.lat.toFixed(4)}</div>
-                        <div>Falsified Lon: {metrics.falsified.lon.toFixed(4)}</div>
-                        <div>Time Offset: {metrics.falsified.timeOffset}s</div>
+                      <div
+                        className="pi-bottom"
+                        style={{ display: "flex", gap: "12px" }}
+                      >
+                        <div style={{ color: "red" }}>
+                          <strong>Reported (falsified):</strong>
+                          <div>Lat: {metrics.falsified.lat.toFixed(4)}</div>
+                          <div>Lon: {metrics.falsified.lon.toFixed(4)}</div>
+                          <div>Time offset: {metrics.falsified.timeOffset}s</div>
+                        </div>
+                        <div style={{ color: "lime" }}>
+                          <strong>Actual:</strong>
+                          <div>
+                            Lat:{" "}
+                            {metrics.falsified.actual?.lat?.toFixed(4) ?? "--"}
+                          </div>
+                          <div>
+                            Lon:{" "}
+                            {metrics.falsified.actual?.lon?.toFixed(4) ?? "--"}
+                          </div>
+                        </div>
                       </div>
                     )}
 
@@ -323,13 +469,24 @@ function Sidebar({
                   onClick={() => setSelectedPlane(plane)}
                 >
                   <div className="pi-top">
-                    <div><strong>{plane}</strong></div>
-                    <div className={`status ${pos.status === "SAFE" ? "safe" : "spoofed"}`}>
+                    <div>
+                      <strong>{plane}</strong>
+                    </div>
+                    <div
+                      className={`status ${
+                        pos.status === "SAFE" ? "safe" : "spoofed"
+                      }`}
+                    >
                       {pos.status}
                     </div>
                   </div>
 
-                  {pos.reason && <div className="spoof-reason">Reason: {pos.reason}</div>}
+                  {/* 🔹 AI prediction for selected plane */}
+                  {isSelected && renderAIPrediction(pos.status)}
+
+                  {pos.reason && (
+                    <div className="spoof-reason">Reason: {pos.reason}</div>
+                  )}
 
                   <div className="pi-bottom">
                     <div>Lat: {pos.lat?.toFixed(4) || "--"}</div>
@@ -344,14 +501,18 @@ function Sidebar({
                       step="0.0001"
                       placeholder="Lat"
                       value={inputs[plane]?.lat || ""}
-                      onChange={(e) => handleInputChange(plane, "lat", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange(plane, "lat", e.target.value)
+                      }
                     />
                     <input
                       type="number"
                       step="0.0001"
                       placeholder="Lon"
                       value={inputs[plane]?.lon || ""}
-                      onChange={(e) => handleInputChange(plane, "lon", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange(plane, "lon", e.target.value)
+                      }
                     />
                     <button
                       className="spoof-button"
