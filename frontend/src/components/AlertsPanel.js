@@ -1,5 +1,5 @@
 import React from "react";
-import { FaExclamationTriangle, FaShieldAlt } from "react-icons/fa"; // alert icons
+import { FaExclamationTriangle, FaShieldAlt } from "react-icons/fa6"; // alert icons
 import "./AlertsPanel.css";
 
 function AlertsPanel({ alerts }) {
