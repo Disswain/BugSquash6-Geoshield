@@ -5,7 +5,7 @@ import {
   FaGlobe,
   FaSatellite,
   FaBroadcastTower,
-} from "react-icons/fa";
+} from "react-icons/fa6";
 import "./ControlPanel.css";
 
 function ControlPanel({

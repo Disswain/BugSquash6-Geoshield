@@ -5,7 +5,7 @@ import {
   FaTimesCircle,
   FaInfoCircle,
   FaDownload,
-} from "react-icons/fa";
+} from "react-icons/fa6";
 import "./EventLogs.css";
 
 function EventLogs({ logs }) {
