@@ -1,0 +1,12 @@
+2025-09-20 03:17:43 : {   "prediction": "SAFE",   "probabilities": [     0.005,     0.995,     0.0   ] }
+2025-09-20 03:17:44 : {   "prediction": "JAMMED",   "probabilities": [     0.655,     0.195,     0.15   ] }
+2025-09-20 03:17:44 : {   "prediction": "JAMMED",   "probabilities": [     0.475,     0.39,     0.135   ] }
+2025-09-20 03:19:45 | Input: [500, 10000, 25, 78, 85, 95] | Prediction: SAFE | Probabilities: [0.005, 0.995, 0]
+2025-09-20 03:19:45 | Input: [100, 5000, 15, 60, 40, 30] | Prediction: JAMMED | Probabilities: [0.655, 0.195, 0.15]
+2025-09-20 03:19:45 | Input: [200, 8000, 20, 70, 55, 40] | Prediction: JAMMED | Probabilities: [0.475, 0.39, 0.135]
+2025-09-20 03:21:19 | Input: [500, 10000, 25, 78, 85, 95] | Prediction: SAFE | Probabilities: [0.005, 0.995, 0]
+2025-09-20 03:21:19 | Input: [100, 5000, 15, 60, 40, 30] | Prediction: JAMMED | Probabilities: [0.655, 0.195, 0.15]
+2025-09-20 03:21:19 | Input: [200, 8000, 20, 70, 55, 40] | Prediction: JAMMED | Probabilities: [0.475, 0.39, 0.135]
+2025-09-20 03:23:58 | Input: [500, 10000, 25, 78, 85, 95] | Prediction: SAFE | Probabilities: [0.005, 0.995, 0]
+2025-09-20 03:23:58 | Input: [100, 5000, 15, 60, 40, 30] | Prediction: JAMMED | Probabilities: [0.655, 0.195, 0.15]
+2025-09-20 03:23:58 | Input: [200, 8000, 20, 70, 55, 40] | Prediction: JAMMED | Probabilities: [0.475, 0.39, 0.135]
