@@ -1,5 +1,5 @@
 import React from "react";
-import { FaExclamationTriangle, FaShieldAlt } from "react-icons/fa6"; // alert icons
+import { FaTriangleExclamation, FaShield } from "react-icons/fa6"; // alert icons
 import "./AlertsPanel.css";
 
 function AlertsPanel({ alerts }) {
@@ -20,9 +20,9 @@ function AlertsPanel({ alerts }) {
           >
             <div className="alert-icon">
               {a.severity === "High" ? (
-                <FaExclamationTriangle />
+               <FaTriangleExclamation />
               ) : (
-                <FaShieldAlt />
+                <FaShield />
               )}
             </div>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import {
   FaCheckCircle,
-  FaExclamationTriangle,
+  FaTriangleExclamation,
   FaTimesCircle,
   FaInfoCircle,
   FaDownload,

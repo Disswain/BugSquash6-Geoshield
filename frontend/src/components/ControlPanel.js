@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  FaPlayCircle,
+  FaCirclePlay,
   FaRotateRight,     // ⬅️ FaRedo was renamed
   FaGlobe,
   FaSatellite,
@@ -27,7 +27,7 @@ function ControlPanel({
           className="btn start-btn"
           onClick={startSimulation}
         >
-          <FaPlayCircle /> {simulationStarted ? "Continue Simulation" : "Start Simulation"}
+          <FaCirclePlay /> {simulationStarted ? "Continue Simulation" : "Start Simulation"}
         </button>
         <button className="btn restart-btn" onClick={restartSimulation}>
          <FaRotateRight /> Restart
