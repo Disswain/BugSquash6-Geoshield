@@ -1,11 +1,11 @@
 import React from "react";
 import {
   FaCheckCircle,
-  FaExclamationTriangle,
+  FaTriangleExclamation,
   FaTimesCircle,
   FaInfoCircle,
   FaDownload,
-} from "react-icons/fa";
+} from "react-icons/fa6";
 import "./EventLogs.css";
 
 function EventLogs({ logs }) {

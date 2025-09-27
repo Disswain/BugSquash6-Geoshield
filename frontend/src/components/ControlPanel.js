@@ -1,11 +1,11 @@
 import React from "react";
 import {
-  FaPlayCircle,
-  FaRedo,
+  FaCirclePlay,
+  FaRotateRight,     // ⬅️ FaRedo was renamed
   FaGlobe,
   FaSatellite,
-  FaBroadcastTower,
-} from "react-icons/fa";
+  FaTowerBroadcast,
+} from "react-icons/fa6";
 import "./ControlPanel.css";
 
 function ControlPanel({
@@ -27,16 +27,16 @@ function ControlPanel({
           className="btn start-btn"
           onClick={startSimulation}
         >
-          <FaPlayCircle /> {simulationStarted ? "Continue Simulation" : "Start Simulation"}
+          <FaCirclePlay /> {simulationStarted ? "Continue Simulation" : "Start Simulation"}
         </button>
         <button className="btn restart-btn" onClick={restartSimulation}>
-          <FaRedo /> Restart
+         <FaRotateRight /> Restart
         </button>
       </div>
 
       {/* Real-Time Mode Toggle */}
       <div className="control-toggle">
-        <FaBroadcastTower className="control-icon" />
+        <FaTowerBroadcast className="control-icon" />
         <span>Real-Time Mode</span>
         <label className="switch">
           <input
